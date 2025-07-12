@@ -1,0 +1,98 @@
+import {
+  bgColor2,
+  blackColor,
+  borderColor,
+  contentColor,
+  FontFamily,
+  inputColor,
+  whiteColor,
+} from './theme';
+
+export const layout: any = {
+  page: {
+    flex: 1,
+    backgroundColor: bgColor2,
+  },
+  paddingH: {
+    paddingHorizontal: 16,
+  },
+  header: {
+    width: '100%',
+    height: 48,
+    backgroundColor: whiteColor,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+  },
+  headerDetailContainer: {
+    padding: 16,
+    backgroundColor: whiteColor,
+    borderRadius: 10,
+  },
+  titleHeader: {
+    alignSelf: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 4,
+    backgroundColor: blackColor,
+    borderRadius: 5,
+    fontSize: 12,
+    fontFamily: FontFamily.poppinsMedium,
+  },
+  textContent: {
+    width: '100%',
+    padding: 8,
+    backgroundColor: contentColor,
+    borderRadius: 5,
+  },
+  tHeadContainer: {
+    backgroundColor: contentColor,
+    borderRadius: 5,
+    width: '100%',
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+  },
+  itemDetailContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 4,
+    paddingBottom: 4,
+    borderBottomColor: borderColor,
+    borderBottomWidth: 0.5,
+    marginBottom: 8,
+  },
+  footer: {
+    width: '90%',
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: 10,
+    backgroundColor: blackColor,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 8,
+    borderRadius: 40,
+  },
+  inputContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    backgroundColor: inputColor,
+    minHeight: 48,
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 2,
+  },
+};
+
+export const shadow = {
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+  elevation: 3,
+};
