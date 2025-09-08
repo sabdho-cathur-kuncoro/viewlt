@@ -23,10 +23,13 @@ const Dropdown = ({
   data,
   height = 40,
   borderWidth = 1,
+  borderRadius = 8,
   changeModalVisibility,
   setData,
   label,
   setLabel,
+  isBorder = true,
+  backgroundColor = 'transparent',
 }: any) => {
   const WIDTH = useWindowDimensions().width;
   const HEIGHT = useWindowDimensions().height;
@@ -53,7 +56,12 @@ const Dropdown = ({
         onPress={() => changeModalVisibility(true)}
         style={[
           styles.dropdownContainer,
-          {height: height, borderWidth: borderWidth},
+          {
+            height: height,
+            borderWidth: isBorder ? borderWidth : 0,
+            borderRadius: borderRadius,
+            backgroundColor: backgroundColor,
+          },
         ]}>
         <Text style={[blackTextStyle, styles.labelDropdown]}>{label}</Text>
         <IcMaterial
@@ -75,7 +83,11 @@ const Dropdown = ({
               styles.modal,
               {width: WIDTH - 30, minHeight: 100, maxHeight: HEIGHT / 2},
             ]}>
-            <ScrollView persistentScrollbar={true}>{option}</ScrollView>
+            <ScrollView
+              persistentScrollbar={true}
+              contentContainerStyle={{paddingHorizontal: 8}}>
+              {option}
+            </ScrollView>
           </View>
         </Pressable>
       </Modal>
@@ -98,7 +110,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderColor: borderColor,
-    borderRadius: 8,
     padding: 8,
   },
   labelDropdown: {
@@ -123,7 +134,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginBottom: 10,
     paddingHorizontal: 16,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
+    borderRadius: 8,
     borderBottomColor: borderColor,
   },
   text: {

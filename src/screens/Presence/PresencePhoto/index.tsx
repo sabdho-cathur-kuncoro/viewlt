@@ -57,7 +57,7 @@ const PresencePhoto = ({navigation, route}: any) => {
       const fullname = storage.getString('fullName');
       const userId = storage.getString('salesId');
       if (camera.current && isCameraReady) {
-        const photo = await camera.current.takePhoto();
+        const photo = await camera.current.takeSnapshot({quality: 80});
         const photoMarker = await presenceMarker(
           photo?.path,
           loc,
@@ -67,20 +67,20 @@ const PresencePhoto = ({navigation, route}: any) => {
           fullname!,
           userId!,
         );
-        console.log(photoMarker);
+        // console.log(photoMarker);
         // NOTE: RESIZE
-        const result = await ImageResizer.createResizedImage(
-          photoMarker,
-          800,
-          800,
-          'JPEG',
-          80,
-          0,
-          undefined,
-          false,
-        );
+        // const result = await ImageResizer.createResizedImage(
+        //   photoMarker,
+        //   800,
+        //   800,
+        //   'JPEG',
+        //   80,
+        //   0,
+        //   undefined,
+        //   false,
+        // );
         // NOTE: GENERATE BASE64
-        const base64 = await RNFS.readFile(result.path, 'base64');
+        const base64 = await RNFS.readFile(photoMarker, 'base64');
         navigation.navigate('PresencePhotoPreview', {type, base64, loc});
       } else {
         dispatch(

@@ -57,6 +57,59 @@ export async function presenceMarker(
     throw new Error('Cannot mark the image');
   }
 }
+export async function globalMarker(
+  photoPath: string,
+  loc: any,
+  type: string,
+  date: string,
+  time: string,
+  name: string,
+  id: string,
+) {
+  try {
+    let path = '';
+    const options = {
+      backgroundImage: {
+        src: {uri: `file://${photoPath}`},
+        scale: 1,
+        rotate: 0,
+      },
+      // support multiple texts
+      watermarkTexts: [
+        {
+          text: `[${id}] ${name.toUpperCase()}${'\n'}${date} ${time}${'\n'}${
+            loc?.lat
+          }, ${loc?.lng}${'\n'}`,
+          positionOptions: {
+            X: '12%',
+            Y: '88%',
+          },
+          style: {
+            color: whiteColor,
+            fontSize: 30,
+            fontName: 'Poppins',
+            textBackgroundStyle: {
+              padding: '2% 10%',
+              type: TextBackgroundType.stretchX,
+              color: 'transparent',
+            },
+          },
+        },
+      ],
+      scale: 1,
+      quality: 100,
+      filename: `${type}-${date}`,
+      saveFormat: ImageFormat.jpg,
+      maxSize: 1000,
+    };
+
+    path = await Marker.markText(options);
+    return path;
+  } catch (err) {
+    console.log(err);
+    throw new Error('Cannot mark the image');
+  }
+}
 
 export async function storeVisitMarker(data: any) {
   try {

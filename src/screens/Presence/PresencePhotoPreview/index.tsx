@@ -60,7 +60,7 @@ const PresencePhotoPreview = ({navigation, route}: any) => {
         />
       </View>
       <View style={styles.footer}>
-        <View style={{width: '40%'}}>
+        <View style={{width: '49%'}}>
           <Button
             title={'Retake Photo'}
             titleColor={primaryColor}
@@ -72,7 +72,7 @@ const PresencePhotoPreview = ({navigation, route}: any) => {
             }}
           />
         </View>
-        <View style={{width: '58%'}}>
+        <View style={{width: '49%'}}>
           <Button
             title={`Send Clock ${type === 1 ? 'In' : 'Out'}`}
             onPress={onHandleSubmit}

@@ -60,7 +60,7 @@ const StorePhoto = ({navigation, route}: any) => {
       const name = await storage.getString('fullName');
       const userid = await storage.getString('salesId');
       if (camera.current && isCameraReady) {
-        const photo = await camera.current.takePhoto();
+        const photo = await camera.current.takeSnapshot({quality: 80});
         const data = {
           ...store,
           photoPath: photo.path,
@@ -72,18 +72,18 @@ const StorePhoto = ({navigation, route}: any) => {
         };
         const photoMarker = await storeVisitMarker(data);
         // NOTE: RESIZE
-        const result = await ImageResizer.createResizedImage(
-          photoMarker,
-          800,
-          800,
-          'JPEG',
-          80,
-          0,
-          undefined,
-          false,
-        );
+        // const result = await ImageResizer.createResizedImage(
+        //   photoMarker,
+        //   800,
+        //   800,
+        //   'JPEG',
+        //   80,
+        //   0,
+        //   undefined,
+        //   false,
+        // );
         // NOTE: GENERATE BASE64
-        const base64 = await RNFS.readFile(result.path, 'base64');
+        const base64 = await RNFS.readFile(photoMarker, 'base64');
         navigation.navigate('StoreVisitPhotoPreview', {base64, store});
       } else {
         dispatch(

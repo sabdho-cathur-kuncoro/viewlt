@@ -71,19 +71,17 @@ export const postResetDeviceAction =
       const user_name = storage.getString('username');
       const password = storage.getString('password');
       const data = {
-        user_name,
-        password,
+        user_name: 'sabdho.kuncoro',
+        password: 'P@ssword123',
       };
       const response = await APIBEARER.post('user/reset-device', data);
       const res = response?.data;
-      if (response?.status === 200 && res?.code === 200) {
+      if (response?.status === 200 && res?.success === true) {
         dispatch(
           setToast({
             toastVisible: true,
-            toastType: 'danger',
-            toastMessage:
-              `[${response?.status ?? '-'}] ${res?.message}` ||
-              `[${response?.status ?? '-'}] Reset device succesfully`,
+            toastType: 'success',
+            toastMessage: `${res?.message}` || `Reset device succesfully`,
             toastDuration: 3000,
           }),
         );

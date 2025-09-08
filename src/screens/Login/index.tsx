@@ -12,7 +12,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {PERMISSIONS} from 'react-native-permissions';
 import {useIsFocused} from '@react-navigation/native';
 import {useAppDispatch} from '../../redux/hooks';
-import {setToast} from '../../redux/action/global';
+import {postResetDeviceAction, setToast} from '../../redux/action/global';
 import {
   bgColor2,
   blackTextStyle,
@@ -20,6 +20,7 @@ import {
   FontFamily,
   greyColor,
   primaryColor,
+  primaryTextStyle,
   whiteColor,
 } from '../../constant/theme';
 import {checkMultiplePermissions} from '../../utils/helper';
@@ -196,6 +197,31 @@ const Login = ({navigation}: any) => {
           fontSize={16}
           onPress={onLogin}
         />
+        <Gap height={16} />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text style={[blackTextStyle, {fontSize: 12}]}>
+            Don't have an account?{' '}
+          </Text>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => {
+              navigation.navigate('Register');
+              // dispatch(postResetDeviceAction());
+            }}>
+            <Text
+              style={[
+                primaryTextStyle,
+                {fontSize: 12, textDecorationLine: 'underline'},
+              ]}>
+              Sign Up
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

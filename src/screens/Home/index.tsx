@@ -70,7 +70,11 @@ const Home = ({navigation}: any) => {
       <ScrollView
         style={{flex: 1}}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: 50, paddingHorizontal: 16}}>
+        contentContainerStyle={{
+          paddingTop: 20,
+          paddingBottom: 50,
+          paddingHorizontal: 16,
+        }}>
         {/* // NOTE: TOP CONTENT */}
         <View
           style={[

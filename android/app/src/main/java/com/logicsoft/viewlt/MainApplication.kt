@@ -12,7 +12,7 @@ import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
 
-// Add these new imports
+// CHUCKER
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.facebook.react.modules.network.NetworkingModule
 
@@ -41,7 +41,7 @@ class MainApplication : Application(), ReactApplication {
     super.onCreate()
     SoLoader.init(this, OpenSourceMergedSoMapping)
 
-    // Add this
+    // CHUCKER
     NetworkingModule.setCustomClientBuilder { builder ->
       builder.addInterceptor(ChuckerInterceptor.Builder(this).build())
     }

@@ -7,7 +7,8 @@ import Router from './src/router';
 import {Provider} from 'react-redux';
 import store from './src/redux/store';
 import {useAppSelector} from './src/redux/hooks';
-import {LoadingGlobal, Popup, Toast} from './src/components';
+import {LoadingGlobal, Popup, SafeScreen, Toast} from './src/components';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 // import {notifService} from './src/utils/notifeeConfig';
 // import {localForegroundNotif} from './src/utils/pushNotif';
 
@@ -25,12 +26,12 @@ const AppMain = () => {
   // }, []);
   return (
     <NavigationContainer>
-      <SafeAreaView style={{flex: 1}}>
+      <SafeScreen>
         {isLoading && <LoadingGlobal />}
         {toastVisible && <Toast />}
         {popupVisible && <Popup />}
         <Router />
-      </SafeAreaView>
+      </SafeScreen>
     </NavigationContainer>
   );
 };
@@ -39,7 +40,9 @@ const App = () => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <Provider store={store}>
-        <AppMain />
+        <SafeAreaProvider>
+          <AppMain />
+        </SafeAreaProvider>
       </Provider>
     </GestureHandlerRootView>
   );

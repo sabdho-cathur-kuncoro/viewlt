@@ -43,7 +43,7 @@ const Attendance = ({navigation}: any) => {
       />
       <ScrollView
         style={{flex: 1}}
-        contentContainerStyle={{paddingTop: 20, paddingBottom: 50}}>
+        contentContainerStyle={{paddingTop: 32, paddingBottom: 50}}>
         <View style={[styles.padding]}>
           <Text
             style={[
@@ -107,6 +107,7 @@ const Attendance = ({navigation}: any) => {
           <View style={styles.row}>
             <TouchableOpacity
               activeOpacity={0.7}
+              onPress={() => navigation.navigate('SickLeave')}
               style={[styles.cardContainer, {height: width / 3.3}]}>
               <View style={{height: '75%'}}>
                 <View
@@ -132,6 +133,7 @@ const Attendance = ({navigation}: any) => {
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.7}
+              onPress={() => navigation.navigate('Permit')}
               style={[styles.cardContainer, {height: width / 3.3}]}>
               <View style={{height: '75%'}}>
                 <View
@@ -160,6 +162,7 @@ const Attendance = ({navigation}: any) => {
           <View style={styles.row}>
             <TouchableOpacity
               activeOpacity={0.7}
+              onPress={() => navigation.navigate('Offday')}
               style={[styles.cardContainer, {height: width / 3.3}]}>
               <View style={{height: '75%'}}>
                 <View
@@ -185,6 +188,7 @@ const Attendance = ({navigation}: any) => {
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.7}
+              onPress={() => navigation.navigate('Leave')}
               style={[styles.cardContainer, {height: width / 3.3}]}>
               <View style={{height: '75%'}}>
                 <View

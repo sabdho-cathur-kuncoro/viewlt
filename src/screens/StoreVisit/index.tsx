@@ -74,7 +74,9 @@ const StoreVisit = ({navigation}: any) => {
             width: '100%',
             alignItems: 'center',
             flexDirection: 'row',
-            paddingVertical: 10,
+            paddingHorizontal: 16,
+            paddingTop: 20,
+            paddingBottom: 10,
             backgroundColor: bgColor2,
           },
         ]}>

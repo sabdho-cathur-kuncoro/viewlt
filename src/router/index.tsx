@@ -9,16 +9,25 @@ import {
   AttendanceReportDetail,
   CameraView,
   Home,
+  Leave,
+  LeaveCreate,
   Login,
+  Offday,
+  OffdayCreate,
   OSA,
   OSAReport,
+  Permit,
+  PermitCreate,
   PresenceLoc,
   PresencePhoto,
   PresencePhotoPreview,
   PricingList,
   PricingReport,
+  Register,
   Report,
   ReportPhoto,
+  SickLeave,
+  SickLeaveCreate,
   Splash,
   StoreDetail,
   StorePhoto,
@@ -68,6 +77,15 @@ export default function Router() {
         component={AttendanceReportDetail}
       />
       <Stack.Screen name="Summary" component={Summary} />
+      <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="SickLeave" component={SickLeave} />
+      <Stack.Screen name="Permit" component={Permit} />
+      <Stack.Screen name="Offday" component={Offday} />
+      <Stack.Screen name="Leave" component={Leave} />
+      <Stack.Screen name="SickLeaveCreate" component={SickLeaveCreate} />
+      <Stack.Screen name="PermitCreate" component={PermitCreate} />
+      <Stack.Screen name="OffdayCreate" component={OffdayCreate} />
+      <Stack.Screen name="LeaveCreate" component={LeaveCreate} />
     </Stack.Navigator>
   );
 }

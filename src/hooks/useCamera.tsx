@@ -59,20 +59,20 @@ const useCamera = () => {
             store_id,
             created_by: sales_id,
           };
-          const photo = await camera.current.takePhoto();
+          const photo = await camera.current.takeSnapshot({quality: 80});
           // NOTE: RESIZE
-          const result = await ImageResizer.createResizedImage(
-            photo?.path,
-            800,
-            800,
-            'JPEG',
-            80,
-            90,
-            undefined,
-            false,
-          );
+          // const result = await ImageResizer.createResizedImage(
+          //   photo?.path,
+          //   800,
+          //   800,
+          //   'JPEG',
+          //   80,
+          //   90,
+          //   undefined,
+          //   false,
+          // );
           // NOTE: GENERATE BASE64
-          const base64 = await RNFS.readFile(result?.path, 'base64');
+          const base64 = await RNFS.readFile(photo.path, 'base64');
           const checkQTYPhoto = photoList.length;
           if (checkQTYPhoto === 0) {
             actions.onSetPhotoList([{...dataList, file_photo: base64}]);

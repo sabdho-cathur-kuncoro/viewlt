@@ -12,7 +12,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {layout} from '../../constant/style';
 import {
   Button,
@@ -23,6 +23,7 @@ import {
 } from '../../components';
 import {
   bgColor2,
+  blackColor,
   blackRGBAColor,
   blackTextStyle,
   borderColor,
@@ -35,23 +36,98 @@ import {
 } from '../../constant/theme';
 import IcMaterialCom from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppDispatch} from '../../redux/hooks';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {setToast} from '../../redux/action/global';
 import {postProductStockAction} from '../../redux/action/osa';
 import {storage} from '../../utils/storage';
+import {
+  Camera,
+  useCameraDevice,
+  useCameraFormat,
+} from 'react-native-vision-camera';
+import {setDateView} from '../../utils/helper';
+import {
+  globalMarker,
+  presenceMarker,
+  storeVisitMarker,
+} from '../../utils/watermarkPhoto';
+import RNFS from 'react-native-fs';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
+import useGetLocation from '../../hooks/useGetLocation';
 
 const OSAReport = ({navigation, route}: any) => {
   const {item} = route.params ?? {};
+  const {lat, lng} = useGetLocation();
   const [isStockAvailable, setIsStockAvailable] = useState<boolean>(true);
   const [isPhotoViewVisible, setisPhotoViewVisible] = useState<boolean>(false);
+  const [isTakePhotoVisible, setisTakePhotoVisible] = useState<boolean>(false);
   const [isConfirmVisible, setIsConfirmVisible] = useState<boolean>(false);
   const [fileNameImg, setFileNameImg] = useState<string | undefined>('');
   const [fileImgBase64, setFileImgBase64] = useState<string | undefined>('');
   const [stock, setStock] = useState<string>('');
+  const device = useCameraDevice('back');
+  const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
+  const camera = useRef<Camera>(null);
 
   const {height} = useWindowDimensions();
 
+  const format = useCameraFormat(device, [
+    {photoAspectRatio: 4 / 3},
+    {photoResolution: {width: 1280, height: 720}},
+  ]);
+
+  const onInitialized = useCallback(() => {
+    setIsCameraReady(true);
+  }, [isCameraReady]);
+
   const dispatch = useAppDispatch();
+
+  async function onHandlePhoto() {
+    try {
+      const d = new Date();
+      const date = await setDateView(d, 'DD-MMMM-YYYY');
+      const time = await setDateView(d, 'HH:mm:ss');
+      const name = await storage.getString('fullName');
+      const userId = await storage.getString('salesId');
+      const loc = {lat, lng};
+      if (camera.current && isCameraReady) {
+        const photo = await camera.current.takeSnapshot({quality: 80});
+        const photoMarker = await globalMarker(
+          photo?.path,
+          loc,
+          'STOCK',
+          date!,
+          time!,
+          name!,
+          userId!,
+        );
+        // NOTE: RESIZE
+        // const result = await ImageResizer.createResizedImage(
+        //   photoMarker,
+        //   800,
+        //   800,
+        //   'JPEG',
+        //   80,
+        //   0,
+        //   undefined,
+        //   false,
+        // );
+        // NOTE: GENERATE BASE64
+        const base64 = await RNFS.readFile(photoMarker, 'base64');
+        // navigation.navigate('StoreVisitPhotoPreview', {base64, store});
+      } else {
+        dispatch(
+          setToast({
+            toastVisible: true,
+            toastType: 'warning',
+            toastMessage: 'Camera is not ready or ref is missing.',
+            toastDuration: 4000,
+          }),
+        );
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   async function onHandleSubmit() {
     try {
@@ -72,63 +148,19 @@ const OSAReport = ({navigation, route}: any) => {
     }
   }
 
-  // NOTE: IMAGE PICKER
-  const pickImage = async () => {
-    let options: any = {
-      mediaType: 'photo',
-      includeBase64: true,
-      quality: 0.7,
-    };
-    const result = await launchImageLibrary(options);
-    if (result.assets) {
-      let imgBase64 = result.assets[0]?.base64;
-      let imgFileName = result.assets[0]?.fileName;
-      setFileImgBase64(imgBase64);
-      setFileNameImg(imgFileName);
-      return;
-    } else if (result.didCancel) {
-      dispatch(
-        setToast({
-          toastVisible: true,
-          toastType: 'warning',
-          toastMessage: 'User cancel',
-          toastDuration: 3000,
-        }),
-      );
-      return;
-    } else if (result.errorCode === 'permission') {
-      dispatch(
-        setToast({
-          toastVisible: true,
-          toastType: 'warning',
-          toastMessage: 'Permission not allowed',
-          toastDuration: 3000,
-        }),
-      );
-      return;
-    } else if (result.errorCode === 'camera_unavailable') {
-      dispatch(
-        setToast({
-          toastVisible: true,
-          toastType: 'warning',
-          toastMessage: 'Camera not available on device',
-          toastDuration: 3000,
-        }),
-      );
-      return;
-    } else if (result.errorCode === 'others') {
-      dispatch(
-        setToast({
-          toastVisible: true,
-          toastType: 'warning',
-          toastMessage:
-            result.errorMessage ?? 'Something Happened, Please try again later',
-          toastDuration: 3000,
-        }),
-      );
-      return;
-    }
-  };
+  if (device == null) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: bgColor2,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Text style={[blackTextStyle, {fontSize: 24}]}>No Camera Device</Text>
+      </View>
+    );
+  }
   return (
     <View style={layout.page}>
       <FocusAwareStatusBar
@@ -243,7 +275,7 @@ const OSAReport = ({navigation, route}: any) => {
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => setisPhotoViewVisible(true)}
-              onLongPress={pickImage}
+              onLongPress={() => setisTakePhotoVisible(true)}
               style={[styles.imgContainer]}>
               <Image
                 source={{uri: `data:image/jpeg;base64,${fileImgBase64}`}}
@@ -254,11 +286,11 @@ const OSAReport = ({navigation, route}: any) => {
           ) : (
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={pickImage}
+              onPress={() => setisTakePhotoVisible(true)}
               style={[styles.imgContainer, {padding: 8}]}>
               <IcMaterialCom name={'camera'} size={40} color={whiteColor} />
               <Text style={[whiteTextStyle, {textAlign: 'center'}]}>
-                Click on the photo above to upload photo evidence
+                Click here to take photo evidence
               </Text>
             </TouchableOpacity>
           )}
@@ -289,7 +321,39 @@ const OSAReport = ({navigation, route}: any) => {
         <Button title="Save" onPress={() => setIsConfirmVisible(true)} />
         {/* <View style={styles.footer}></View> */}
       </ScrollView>
-      {/* // NOTE: MODAL PHOTO */}
+      {/* // NOTE: MODAL TAKE PHOTO */}
+      <Modal visible={isTakePhotoVisible} animationType="fade" transparent>
+        <View style={{flex: 1}}>
+          <Camera
+            ref={camera}
+            style={[StyleSheet.absoluteFill, {height: height}]}
+            device={device}
+            isActive={isCameraReady}
+            format={format}
+            photo
+            isMirrored
+            outputOrientation="device"
+            onInitialized={onInitialized}
+          />
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setisTakePhotoVisible(false)}
+            style={[
+              styles.btn,
+              styles.btnClose,
+              {backgroundColor: 'transparent'},
+            ]}>
+            <IcMaterialCom name="close" size={32} color={whiteColor} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={onHandlePhoto}
+            style={[styles.btn, styles.btnCamera]}>
+            <IcMaterialCom name="camera" size={32} color={blackColor} />
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      {/* // NOTE: MODAL PHOTO PREVIEW */}
       <Modal visible={isPhotoViewVisible} animationType="fade" transparent>
         <TouchableWithoutFeedback>
           <View style={styles.modalContainer}>
@@ -400,5 +464,22 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     backgroundColor: 'transparent',
+  },
+  btn: {
+    width: 64,
+    height: 64,
+    borderRadius: 64 / 2,
+    backgroundColor: whiteColor,
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  btnCamera: {
+    bottom: 30,
+    alignSelf: 'center',
+  },
+  btnClose: {
+    top: 0,
+    right: 0,
   },
 });

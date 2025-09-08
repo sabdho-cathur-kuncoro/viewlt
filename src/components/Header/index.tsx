@@ -91,8 +91,10 @@ const styles = StyleSheet.create({
   header: {
     width: '100%',
     minHeight: 50,
-    maxHeight: 80,
+    maxHeight: 100,
+    paddingTop: 24,
     paddingHorizontal: 16,
+    paddingBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

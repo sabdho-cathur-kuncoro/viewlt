@@ -5,6 +5,7 @@ import {
   contentColor,
   FontFamily,
   inputColor,
+  primaryColor,
   whiteColor,
 } from './theme';
 
@@ -83,6 +84,17 @@ export const layout: any = {
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 2,
+  },
+  FAB: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 24,
+    backgroundColor: primaryColor,
   },
 };
 

@@ -7,6 +7,7 @@ import ModalConfirmation from './ModalConfirmation';
 import Popup from './Popup';
 import Toast from './Toast';
 import Dropdown from './Dropdown';
+import SafeScreen from './SafeScreen';
 
 export {
   Button,
@@ -18,4 +19,5 @@ export {
   Popup,
   Toast,
   Dropdown,
+  SafeScreen,
 };

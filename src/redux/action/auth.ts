@@ -168,17 +168,7 @@ export const logoutAction =
       const res = response?.data;
       // console.log(response);
       if (response?.status === 200) {
-        await storage.clearAll();
-        // storage.set('telepon', data.user_id);
-        // storage.set('salesId', res?.sales_id);
-        // storage.set('password', data.password);
-        // storage.set('token', res?.token);
-        // storage.set('username', res?.user_name);
-        // storage.set('refreshToken', res?.refreshToken);
-        // storage.set('generalId', res?.general_id);
-        // storage.set('role', res?.role);
-        // storage.set('roleId', res?.role_id);
-        // subscribeTopic(res?.user_id);
+        storage.clearAll();
         dispatch(
           setToast({
             toastVisible: true,
@@ -210,6 +200,68 @@ export const logoutAction =
           toastMessage:
             `[${error?.code ?? '-'}]${error?.message}` ||
             '[System]Error logout',
+          toastDuration: 3000,
+        }),
+      );
+    } finally {
+      dispatch(setBtnLoading(false));
+    }
+  };
+
+export const registerAction =
+  (data: any, navigation: any) => async (dispatch: Dispatch<Action>) => {
+    try {
+      dispatch(setBtnLoading(true));
+      const form = {
+        sales_name: '',
+        gender: '',
+        religion: '',
+        education: '',
+        address: '',
+        place_of_birth: '',
+        date_of_birth: '',
+        email: '',
+        telephone: '',
+        user_name: '',
+        password: '',
+        created_by: '',
+      };
+      console.log(form);
+      const response = await APIBASIC.post('sales/registration', form);
+      const res = response?.data;
+      // console.log(response);
+      if (response?.status === 200) {
+        dispatch(
+          setToast({
+            toastVisible: true,
+            toastType: 'success',
+            toastMessage: res?.message || 'Registration Success!',
+            toastDuration: 3000,
+          }),
+        );
+        navigation.replace('Login');
+      } else {
+        dispatch(
+          setToast({
+            toastVisible: true,
+            toastType: 'danger',
+            toastMessage: `[${
+              res?.status ?? '-'
+            }]Terjadi kesalahan saat mendaftar, silahkan ulangi kembali`,
+            toastDuration: 3000,
+          }),
+        );
+      }
+    } catch (err: any) {
+      const error = err?.response?.data;
+      console.log('[err]', error);
+      dispatch(
+        setToast({
+          toastVisible: true,
+          toastType: 'danger',
+          toastMessage:
+            `[${error?.code ?? '-'}]${error?.message}` ||
+            '[System]Error Registration',
           toastDuration: 3000,
         }),
       );

@@ -18,6 +18,15 @@ import PricingReport from './PricingReport';
 import OSAReport from './OSAReport';
 import Summary from './Summary';
 import StoreVisitPhotoPreview from './StoreVisitPhotoPreview';
+import Register from './Register';
+import SickLeave from './SickLeave';
+import Permit from './Permit';
+import Offday from './Offday';
+import Leave from './Leave';
+import SickLeaveCreate from './SickLeaveCreate';
+import PermitCreate from './PermitCreate';
+import OffdayCreate from './OffdayCreate';
+import LeaveCreate from './LeaveCreate';
 
 export {
   Splash,
@@ -42,4 +51,13 @@ export {
   OSAReport,
   Summary,
   StoreVisitPhotoPreview,
+  Register,
+  SickLeave,
+  Permit,
+  Offday,
+  Leave,
+  SickLeaveCreate,
+  PermitCreate,
+  OffdayCreate,
+  LeaveCreate,
 };
